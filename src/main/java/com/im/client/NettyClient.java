@@ -42,7 +42,8 @@ public class NettyClient {
                                 .addLast(new MessageResponseHandler()) //处理返回聊天消息
                                 .addLast(new CreateGroupResponseHandler())  //处理创建群组消息
                                 .addLast(new JoinGroupResponseHandler()) //加入群组
-                                .addLast(new QuitGroupResponseHandler())
+                                .addLast(new QuitGroupResponseHandler())//退出群聊
+                                .addLast(new SendToGroupResponseHandler()) //发送群消息
                                 .addLast(new PacketEncoder());   //处理消息打包消息
                     }
                 });

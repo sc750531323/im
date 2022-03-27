@@ -1,5 +1,6 @@
 package com.im.message;
 
+import com.im.message.command.Command;
 import com.im.message.packet.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -106,6 +107,14 @@ public class PacketCodeC {
 
         if(GROUP_QUIT_RESPONSE== command){
             clazz  = QuitGroupResponsePacket.class;
+        }
+
+        if(GROUP_SEND_REQUEST == command){
+            clazz = SendToGroupRequestPacket.class;
+        }
+
+        if(GROUP_SEND_RESPONSE == command){
+            clazz = SendToGroupResponsePacket.class;
         }
 
         return clazz;

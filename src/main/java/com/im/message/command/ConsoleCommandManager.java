@@ -16,11 +16,12 @@ public class ConsoleCommandManager implements ConsoleCommand {
         consoleCommandMap.put("createGroup",new CreateGroupConsoleCommand());
         consoleCommandMap.put("joinGroup",new JoinGroupConsoleCommand());
         consoleCommandMap.put("quitGroup",new QuitGroupConsoleCommand());
+        consoleCommandMap.put("sendToGroup",new SendToGroupConsoleCommand());
     }
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
-        System.out.println("请输入要执行的指令：【sendToUser，createGroup，joinGroup,quitGroup】");
+        System.out.println("请输入要执行的指令：【sendToUser，createGroup，joinGroup,quitGroup，sendToGroup】");
         String command = scanner.next().trim();
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
 
