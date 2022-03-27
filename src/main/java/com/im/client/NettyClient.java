@@ -18,7 +18,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 import java.nio.charset.Charset;
-import java.sql.Time;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -35,15 +34,14 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {//handler定义连接业务处理逻辑,客户端建立连接之后向服务端
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
-//                                .addLast(new FirstClientHandler())
-                                .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,7,4)) //处理消息解包
+                                .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4)) //处理消息解包
                                 .addLast(new PacketDecoder()) //处理消息解码
-                                .addLast(new LoginResponseHandler())  //处理登录返回结果消息
-                                .addLast(new MessageResponseHandler()) //处理返回聊天消息
-                                .addLast(new CreateGroupResponseHandler())  //处理创建群组消息
-                                .addLast(new JoinGroupResponseHandler()) //加入群组
-                                .addLast(new QuitGroupResponseHandler())//退出群聊
-                                .addLast(new SendToGroupResponseHandler()) //发送群消息
+                                .addLast(LoginResponseHandler.INSTANCE)  //处理登录返回结果消息
+                                .addLast(MessageResponseHandler.INSTANCE) //处理返回聊天消息
+                                .addLast(CreateGroupResponseHandler.INSTANCE)  //处理创建群组消息
+                                .addLast(JoinGroupResponseHandler.INSTANCE) //加入群组
+                                .addLast(QuitGroupResponseHandler.INSTANCE)//退出群聊
+                                .addLast(SendToGroupResponseHandler.INSTANCE) //发送群消息
                                 .addLast(new PacketEncoder());   //处理消息打包消息
                     }
                 });
@@ -86,11 +84,11 @@ public class NettyClient {
                 if (!SessionUtil.hasLogin(channel)) {
                     //没有登录，则执行登录逻辑
                     System.out.println("用户尚未登录，先执行登录逻辑");
-                    loginConsoleCommand.exec(sc,channel);
+                    loginConsoleCommand.exec(sc, channel);
                     waitForRegisterFinish();
-                }else {
+                } else {
                     //如果已经登录了
-                    consoleCommandManager.exec(sc,channel);
+                    consoleCommandManager.exec(sc, channel);
 //                    MessageRequestPacket packet = new MessageRequestPacket();
 //                    System.out.println("请输入需要接受的用户id：");
 //                    String toUserId = sc.nextLine();
@@ -104,7 +102,7 @@ public class NettyClient {
         }).start();
     }
 
-    private static void waitForRegisterFinish(){
+    private static void waitForRegisterFinish() {
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
