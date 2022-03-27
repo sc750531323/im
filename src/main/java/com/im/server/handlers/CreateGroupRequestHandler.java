@@ -2,6 +2,7 @@ package com.im.server.handlers;
 
 import com.im.message.packet.CreateGroupRequestPacket;
 import com.im.message.packet.CreateGroupResponsePacket;
+import com.im.util.Session;
 import com.im.util.SessionUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,6 +21,7 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupRequestPacket packet) throws Exception {
         List<String> userIdList = packet.getUserIdList();
         List<String> userNameList = new ArrayList<>();
+        List<Session> sessionList = new ArrayList<>();
 
         //1.创建channel分组
         ChannelGroup channelGroup = new DefaultChannelGroup(ctx.executor());
@@ -28,20 +30,23 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
             Channel channel = SessionUtil.getChannel(userId);
             if(channel != null){
                 channelGroup.add(channel);
-                userNameList.add(SessionUtil.getSession(channel).getUserName());
+                String userName = SessionUtil.getUsernameByUserId(userId);
+                userNameList.add(userName);
+                sessionList.add(new Session(userId,userName));
             }
         }
-
         //创建群聊创建相应结果
         CreateGroupResponsePacket createGroupResponsePacket = new CreateGroupResponsePacket();
-        createGroupResponsePacket.setGrouId(UUID.randomUUID().toString());
+        String groupId = UUID.randomUUID().toString();
+        createGroupResponsePacket.setGrouId(groupId);
         createGroupResponsePacket.setSuccess(true);
         createGroupResponsePacket.setUserIdList(userIdList);
+        createGroupResponsePacket.setUserNameList(userNameList);
         //给组内的每个channel都写入packet
         channelGroup.writeAndFlush(createGroupResponsePacket);
-
-        System.out.println("群创建成功，id 是：【"+createGroupResponsePacket.getGrouId()+"】");
-        System.out.println("群里面有【"+createGroupResponsePacket.getUserIdList()+"】");
-
+        SessionUtil.createGroup(groupId,channelGroup);
+        SessionUtil.addSessionToGroup(groupId,sessionList);
+        System.out.println("群创建成功，id 是：【"+groupId+"】");
+        System.out.println("群里面有"+SessionUtil.getAllUsernameByGroupId(groupId));
     }
 }

@@ -92,6 +92,22 @@ public class PacketCodeC {
             clazz = CreateGroupResponsePacket.class;
         }
 
+        if(GROUP_JOIN_REQUEST == command){
+            clazz = JoinGroupRequestPacket.class;
+        }
+
+        if(GROUP_JOIN_RESPONSE == command){
+            clazz  = JoinGroupResponsePacket.class;
+        }
+
+        if(GROUP_QUIT_REQUEST== command){
+            clazz  = QuitGroupRequestPacket.class;
+        }
+
+        if(GROUP_QUIT_RESPONSE== command){
+            clazz  = QuitGroupResponsePacket.class;
+        }
+
         return clazz;
     }
 }

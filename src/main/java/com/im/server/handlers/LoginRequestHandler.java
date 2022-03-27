@@ -12,16 +12,17 @@ import java.util.UUID;
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket packet) throws Exception {
-        System.out.println("服务端收到注册数据");
+        String userName = packet.getName();
+        System.out.println("服务端收到注册数据,用户名："+packet.getName());
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         String userId = UUID.randomUUID().toString();
         loginResponsePacket.setVersion(packet.getVersion());
         loginResponsePacket.setSuccess(true);
         loginResponsePacket.setUserId(userId);
-        loginResponsePacket.setUserName(loginResponsePacket.getUserName());
-        SessionUtil.bindSession(new Session(userId,packet.getName()),ctx.channel());
+        loginResponsePacket.setUserName(userName);
+        SessionUtil.bindSession(new Session(userId,userName),ctx.channel());
+        SessionUtil.addLoginUser(userId,userName);
         ctx.channel().writeAndFlush(loginResponsePacket);
-        System.out.println("注册成功，响应客户端注册信息");
     }
 
     @Override

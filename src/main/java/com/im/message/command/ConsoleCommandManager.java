@@ -14,20 +14,17 @@ public class ConsoleCommandManager implements ConsoleCommand {
         consoleCommandMap.put("sendToUser",new SendToUserConsoleCommand());
         consoleCommandMap.put("logout",new LogoutConsoleCommand());
         consoleCommandMap.put("createGroup",new CreateGroupConsoleCommand());
+        consoleCommandMap.put("joinGroup",new JoinGroupConsoleCommand());
+        consoleCommandMap.put("quitGroup",new QuitGroupConsoleCommand());
     }
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
-        System.out.println("请输入要执行的指令：【sendToUser，createGroup】");
-        String command = scanner.nextLine().trim();
-        if("".equals(command)){
-            System.out.println("返回，收到的command是:"+command);
-            return;
-        }
+        System.out.println("请输入要执行的指令：【sendToUser，createGroup，joinGroup,quitGroup】");
+        String command = scanner.next().trim();
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
 
         if(consoleCommand != null){
-            System.out.println("收到的command是【"+command+"】，执行ConsoleCommand类是：【"+consoleCommand.getClass()+"】");
             consoleCommand.exec(scanner,channel);
         }else {
             System.out.println("收到的command是【"+command+"】，无法识别指令【"+command+"】,请重新输入");

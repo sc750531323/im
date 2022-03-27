@@ -35,4 +35,13 @@ public class LoginRequestPacket extends Packet {
     public Byte getCommand() {
         return LOGIN_REQUEST;
     }
+
+    @Override
+    public String toString() {
+        return "LoginRequestPacket{" +
+                "userId='" + userId + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
