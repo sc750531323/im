@@ -14,9 +14,7 @@ import java.util.List;
  * 比如ByteToMessageDecoder类中维护的一个字节累加器cumulation，
  * 每次读到当前channel的消息后都会将消息累加到cumulation中，然后再调用子类实现的decode方法。
  */
-//@ChannelHandler.Sharable
 public class PacketDecoder extends ByteToMessageDecoder {
-//    public static final PacketDecoder INSTANCE = new PacketDecoder();
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {

@@ -80,7 +80,10 @@ public class SessionUtil {
     }
 
     public static void unBindSession(Channel channel){
-        userIdChannelMap.remove(getSession(channel).getUserId());
+        Session session = getSession(channel);
+        if(session != null){
+            userIdChannelMap.remove(session.getUserId());
+        }
         channel.attr(Attributes.SESSION).set(null);
     }
 

@@ -21,15 +21,10 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         nioSocketChannel.pipeline().addLast(new Spliter());
-                        nioSocketChannel.pipeline().addLast(new PacketDecoder());
+                        nioSocketChannel.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(AuthHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(MessageRequestHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(SendToGroupRequestHandler.INSTANCE);
-                        nioSocketChannel.pipeline().addLast(new PacketEncoder());
+                        nioSocketChannel.pipeline().addLast(IMHandler.INSTANCE);
                     }
                 });
         bind(serverBootstrap, 8080);
