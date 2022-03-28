@@ -117,6 +117,14 @@ public class PacketCodeC {
             clazz = SendToGroupResponsePacket.class;
         }
 
+        if(HEARTBEAT_REQUEST == command){
+            clazz = HeartBeatRequestPacket.class;
+        }
+        if(HEARTBEAT_RESPONSE== command){
+            clazz = HeartBeatResponsePacket.class;
+        }
+
+
         return clazz;
     }
 }

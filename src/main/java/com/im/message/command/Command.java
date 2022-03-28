@@ -13,5 +13,7 @@ public interface Command {
     Byte GROUP_QUIT_RESPONSE = 10;
     Byte GROUP_SEND_REQUEST = 11;
     Byte GROUP_SEND_RESPONSE = 12;
+    Byte HEARTBEAT_REQUEST = 13;
+    Byte HEARTBEAT_RESPONSE = 14;
 
 }

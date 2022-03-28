@@ -36,6 +36,8 @@ public class NettyClient {
                         socketChannel.pipeline()
                                 .addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4)) //处理消息解包
                                 .addLast(new PacketDecoder()) //处理消息解码
+                                .addLast(new HeartBeatTimeHandler()) //心跳发送器
+                                .addLast(new HeartbeatResponseHandler())
                                 .addLast(LoginResponseHandler.INSTANCE)  //处理登录返回结果消息
                                 .addLast(MessageResponseHandler.INSTANCE) //处理返回聊天消息
                                 .addLast(CreateGroupResponseHandler.INSTANCE)  //处理创建群组消息

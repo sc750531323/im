@@ -20,8 +20,10 @@ public class NettyServer {
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+                        nioSocketChannel.pipeline().addLast(new ImIdleStateHandler());
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        nioSocketChannel.pipeline().addLast(new HeartbeatRequestHandler());
                         nioSocketChannel.pipeline().addLast(LoginRequestHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(AuthHandler.INSTANCE);
                         nioSocketChannel.pipeline().addLast(IMHandler.INSTANCE);
